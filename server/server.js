@@ -120,6 +120,14 @@ app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
 
+// POST /users/login {email, password}
+app.post('/users/login', (req, res) => {
+  const email = req.params.email;
+  const password = req.params.password;
+
+  
+});
+
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 });
