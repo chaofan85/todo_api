@@ -226,10 +226,35 @@ describe('POST /users', () => {
   });
 
   it('should return validation errors if request invalid', (done) => {
+    const email = '34twegar';
+    const password = '231';
 
+    request(app)
+      .post('/users')
+      .send({email, password})
+      .expect(400)
+      .expect((res) => {
+        expect(res.body._id).toBeFalsy();
+        expect(res.body.email).toBeFalsy();
+      })
+      .end(done);
   });
 
   it('should not create user if email in user', (done) => {
+    const email1 = 'example@example.com';
+    const password1 = '123mnb!';
+    const email2 = 'example@example.com';
+    const password2 = '123mnb!';
 
+    request(app)
+      .post('/users')
+      .send({email1, password1})
+      .send({email2, password2})
+      .expect(400)
+      .expect((res) => {
+        expect(res.body._id).toBeFalsy();
+        expect(res.body.email).toBeFalsy();
+      })
+      .end(done);
   });
 });
