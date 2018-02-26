@@ -16,11 +16,10 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
-app.post('/todos', (req, res) => {
+app.post('/todos', authenticate, (req, res) => {
   const todo = new Todo({
     text: req.body.text,
-    completed: req.body.completed,
-    completedAt: req.body.completedAt
+    _creator: req.user._id
   });
 
   todo.save().then((doc) => {
