@@ -133,34 +133,6 @@ app.post('/users/login', (req, res) => {
   }).catch((e) => {
     res.status(400).send();
   });
-
-  // const email = req.body.email;
-  // const password = req.body.password;
-  // let user;
-  //
-  // User.findOne({email}, (err, doc) => {
-  //   if (err) {
-  //     return res.status(400).send(err);
-  //   }
-  //
-  //   if (!doc) {
-  //     return res.status(404).send();
-  //   }
-  //
-  //   console.log(doc);
-  //
-  //   bcrypt.compare(password, doc.password, (err2, res2) => {
-  //     console.log(res2);
-  //     if (!res2) {
-  //       return res.status(401).send();
-  //     }
-  //
-  //     res.send({
-  //       id: doc._id,
-  //       email: doc.email,
-  //     });
-  //   });
-  // });
 });
 
 app.listen(port, () => {
