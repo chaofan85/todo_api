@@ -80,13 +80,13 @@ describe('GET /todos/:id', () => {
       .end(done);
   });
 
-  // it('should not return todo doc created by other user', (done) => {
-  //   request(app)
-  //     .get(`/todos/${preTodos[1]._id.toHexString()}`)
-  //     .set('x-auth', users[0].tokens[0].token)
-  //     .expect(404)
-  //     .end(done);
-  // });
+  it('should not return todo doc created by other user', (done) => {
+    request(app)
+      .get(`/todos/${preTodos[1]._id.toHexString()}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(404)
+      .end(done);
+  });
 
   it('should return 404 if todo not found', (done) => {
     const id = new ObjectID();
@@ -130,7 +130,7 @@ describe('DELETE /todos/:id', () => {
       });
   });
 
-  it('should remove a todo', (done) => {
+  it('should not remove a todo created by other user', (done) => {
     const hexId = preTodos[0]._id.toHexString();
 
     request(app)
@@ -178,6 +178,7 @@ describe('PATCH /todos/:id', () => {
 
     request(app)
       .patch(`/todos/${id}`)
+      .set('x-auth', users[0].tokens[0].token)
       .send(body)
       .expect(200)
       .expect((res) => {
@@ -189,12 +190,29 @@ describe('PATCH /todos/:id', () => {
 
   });
 
+  it('should not update the todo created by other user', (done) => {
+    const id = preTodos[1]._id.toHexString();
+    const body = {
+      text: 'updated',
+      completed: true
+    };
+
+    request(app)
+      .patch(`/todos/${id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .send(body)
+      .expect(404)
+      .end(done);
+
+  });
+
   it('should clear completedAt when todo is not completed', (done) => {
     const id = preTodos[1]._id.toHexString();
 
     const text = 'new text';
     request(app)
       .patch(`/todos/${id}`)
+      .set('x-auth', users[1].tokens[0].token)
       .send({
         completed: false,
         text
