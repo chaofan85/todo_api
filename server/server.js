@@ -40,14 +40,17 @@ app.get('/todos', authenticate, (req, res) => {
 });
 
 // GET /todos/1234324
-app.get('/todos/:id', (req, res) => {
+app.get('/todos/:id', authenticate, (req, res) => {
   const id = req.params.id;
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send({});
   }
 
-  Todo.findById(id).then((todo) => {
+  Todo.findOne({
+    _id: id,
+    _creator: req.user._id
+  }).then((todo) => {
     if (todo) {
       res.status(200).send( {todo});
     } else {
